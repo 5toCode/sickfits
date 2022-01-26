@@ -1,7 +1,10 @@
+import Router from 'next/router';
+
 import { useMutation } from '@apollo/client';
 import gql from 'graphql-tag';
 import useForm from '../lib/useForm';
 import DisplayError from './ErrorMessage';
+import { ALL_PRODUCTS_QUERY } from './Products';
 
 import Form from './styles/Form';
 
@@ -42,6 +45,7 @@ export default function CreateProduct() {
     CREATE_PRODUCT_MUTATION,
     {
       variables: inputs,
+      refetchQueries: [{ query: ALL_PRODUCTS_QUERY }],
     }
   );
 
@@ -49,10 +53,13 @@ export default function CreateProduct() {
     <Form
       onSubmit={async (e) => {
         e.preventDefault();
-        console.log(inputs);
         // submit the input fields to the backend
-        await createProduct();
+        const res = await createProduct();
         clearForm();
+        // Go to that product's page
+        Router.push({
+          pathname: `/product/${res.data.createProduct.id}`,
+        });
       }}
     >
       <DisplayError error={error} />
