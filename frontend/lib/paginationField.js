@@ -30,7 +30,7 @@ export default function paginationField() {
 
       // if there are items, return them from the cache
       if (items.length) {
-        console.log(`there are ${items.length} in the cache`);
+        // console.log(`there are ${items.length} in the cache`);
         return items;
       }
 
